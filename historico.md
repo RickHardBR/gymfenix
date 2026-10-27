@@ -1,8 +1,8 @@
 # FÊNIX GYM TRACKER - HISTÓRICO DE DESENVOLVIMENTO
 
 > **Última atualização:** 26/10/2026  
-> **Status Geral:** Fases 1 a 4 100% Concluídas | Nova Aba Perfil do Atleta (U.S. Navy Body Fat, Massa Magra, Cintura/Estatura) | Troca de Aparelhos | Guia Visual & Anatômico | Supabase Operacional  
-> **Suíte de Testes:** 30 arquivos de teste, 68 testes unitários e de integração — **100% aprovados**  
+> **Status Geral:** Fases 1 a 6 Concluídas | PWA Instalável no Celular & Modo Tela Cheia Standalone | Aba Perfil & Gordura U.S. Navy | Troca de Aparelhos | Supabase Operacional  
+> **Suíte de Testes:** 31 arquivos de teste, 71 testes unitários e de integração — **100% aprovados**  
 > **Build de Produção:** `tsc -b && vite build` — **Sucesso (Código 0)**  
 
 ---
@@ -100,6 +100,18 @@ O **Fênix Gym Tracker** é um aplicativo mobile-first projetado para gerenciar 
 - **Troca Rápida de Aparelhos no Treino Ativo:**
   - Botão com 1 toque no card de cada exercício ativo para selecionar aparelhos alternativos da academia (ex: Halteres, Smith, Polia, Máquina Articulada).
   - Suporte a substituição temporária (apenas no treino de hoje) ou permanente no modelo do treino.
+
+### ✅ PWA (PROGRESSIVE WEB APP) & MODO TELA CHEIA TOTAL
+- **Instalabilidade Completa:**
+  - Configuração do manifesto moderno W3C (`manifest.webmanifest`) com suporte a `display: standalone` e `fullscreen`, sem barra de endereço.
+  - Ícones vetoriais e de alta resolução `icon-192.png` e `icon-512.png` com o monograma de fogo FG.
+  - Meta tags para iOS Safari (`apple-mobile-web-app-capable`, `apple-mobile-web-app-status-bar-style: black-translucent`).
+- **Service Worker Nativo (`public/sw.js`):**
+  - Cache de ativos estáticos com estratégia *stale-while-revalidate* para abertura instantânea e 100% offline.
+- **Hook `usePWA` & Modal Interativo (`PWAInstallModal`):**
+  - Captura inteligente do evento `beforeinstallprompt` (Android/Chrome).
+  - Guia ilustrado com passos para usuários de iPhone / iPad (Safari).
+  - Botão de alternância instantânea para **Modo Tela Cheia** (Fullscreen API nativa) disponível no cabeçalho, na barra de treino ativo e na tela de Ajustes.
 
 ## 4. Estrutura do Banco no Supabase (`supabase_schema.sql`)
 

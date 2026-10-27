@@ -12,6 +12,8 @@ import {
   Award,
   Activity,
   RefreshCw,
+  Maximize,
+  Minimize,
 } from 'lucide-react';
 import type { WorkoutSession, ExerciseSetLog, SetType, PainReport } from '../../types/session';
 import type { Exercise } from '../../types/workout';
@@ -25,6 +27,7 @@ import {
 import { getExerciseById, getAllExercises } from '../../services/exerciseService';
 import { INITIAL_EXERCISES } from '../../data/initialExercises';
 import { useApp } from '../../context/AppContext';
+import { usePWA } from '../../hooks/usePWA';
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
@@ -272,6 +275,7 @@ export const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({
   onCancelWorkout,
 }) => {
   const { settings, showFeedback } = useApp();
+  const { isFullscreen, toggleFullscreen } = usePWA();
   const [session, setSession] = useState<WorkoutSession>(initialSession);
   const [elapsedSec, setElapsedSec] = useState<number>(0);
   const [restTimerSeconds, setRestTimerSeconds] = useState<number | null>(null);
@@ -544,7 +548,17 @@ export const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({
           </ElapsedTime>
         </SessionInfo>
 
-        <div style={{ display: 'flex', gap: 8 }}>
+        <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={toggleFullscreen}
+            aria-label={isFullscreen ? 'Sair da tela cheia' : 'Modo tela cheia'}
+            title={isFullscreen ? 'Sair da tela cheia' : 'Tela cheia'}
+            style={{ padding: '6px 8px' }}
+          >
+            {isFullscreen ? <Minimize size={15} /> : <Maximize size={15} />}
+          </Button>
           <Button variant="ghost" size="sm" onClick={onCancelWorkout}>
             Cancelar
           </Button>

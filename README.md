@@ -14,8 +14,8 @@
   <img src="https://img.shields.io/badge/Vite-6-orange.svg" alt="Vite" />
   <img src="https://img.shields.io/badge/Styled--Components-6-pink.svg" alt="Styled Components" />
   <img src="https://img.shields.io/badge/Supabase-Auth_%26_PostgreSQL-green.svg" alt="Supabase" />
-  <img src="https://img.shields.io/badge/IndexedDB-Offline--First-purple.svg" alt="IndexedDB" />
-  <img src="https://img.shields.io/badge/Tests-68%20Passed-brightgreen.svg" alt="Vitest 68 Tests Passed" />
+  <img src="https://img.shields.io/badge/PWA-Installable_%26_Fullscreen-blueviolet.svg" alt="PWA Installable" />
+  <img src="https://img.shields.io/badge/Tests-71%20Passed-brightgreen.svg" alt="Vitest 71 Tests Passed" />
 </p>
 
 ---
@@ -184,7 +184,13 @@ Aberto em formato de gaveta moderna (*bottom sheet*) diretamente na tela de trei
 
 ---
 
-### 4.9 Ajustes do Sistema & Conexões
+### 4.9 Ajustes do Sistema, Instalação no Celular & Tela Cheia
+- **Instalação no Celular (PWA - Progressive Web App):**
+  - **Android / Chrome / Edge:** Clique em **"Instalar no Celular"** no cabeçalho ou em Ajustes para adicionar o app à tela inicial do smartphone com ícone nativo em alta resolução.
+  - **iPhone / iPad (Safari iOS):** Toque no botão **Compartilhar** do Safari e selecione **"Adicionar à Tela de Início"**. O app abrirá sem nenhuma barra de navegação, ocupando 100% da tela como app da App Store.
+  - **Funcionamento Offline:** Graças ao Service Worker e IndexedDB, o app abre instantaneamente e salva todos os treinos mesmo no subsolo da academia sem internet.
+- **Modo Tela Cheia (Fullscreen API):**
+  - Botão de alternância rápida de tela cheia no cabeçalho superior e na barra fixa do treino em andamento.
 - **Gerenciamento de Nuvem & Sincronização:**
   - Status da conexão com o Supabase.
   - Botão de **Sincronizar Agora** para envio forçado de dados pendentes.
@@ -198,6 +204,8 @@ Aberto em formato de gaveta moderna (*bottom sheet*) diretamente na tela de trei
 
 | Botão / Elemento | Onde Fica | Ação e Comportamento no Sistema |
 | :--- | :--- | :--- |
+| **Instalar no Celular (Smartphone)** | Cabeçalho / Ajustes | Abre o modal de instalação do app na tela inicial do celular com tela cheia. |
+| **Tela Cheia (Maximize / Minimize)** | Cabeçalho / Barra Treino | Expande a visualização para tela cheia imediata sem bordas do navegador. |
 | **Entrar / Cadastrar** | Tela de Login | Valida credenciais no Supabase e carrega perfil do usuário. |
 | **Continuar Offline** | Tela de Login | Pula o login e abre o app usando o banco local IndexedDB. |
 | **Iniciar Treino** | Home / Treinos | Inicia a sessão ativa com cronômetro e salva no IndexedDB. |

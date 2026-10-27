@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { User, ShieldAlert, Save, RotateCcw, AlertTriangle, Moon, Cloud, CloudCheck, LogOut, LogIn, RefreshCw } from 'lucide-react';
+import { User, ShieldAlert, Save, RotateCcw, AlertTriangle, Moon, Cloud, CloudCheck, LogOut, LogIn, RefreshCw, Smartphone, Maximize, Minimize, Download } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { usePWA } from '../../hooks/usePWA';
+import { PWAInstallModal } from '../common/PWAInstallModal';
 import { INITIAL_USER_PROFILE } from '../../types/profile';
 import type { UserProfile, ExperienceLevel, TrainingMethod } from '../../types/profile';
 import { Card } from '../common/Card';
@@ -195,6 +197,9 @@ export const ProfileScreen: React.FC = () => {
     }));
   };
 
+  const { isInstallable, isStandalone, isFullscreen, isIOS, promptInstall, toggleFullscreen } = usePWA();
+  const [isInstallModalOpen, setIsInstallModalOpen] = useState(false);
+
   const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
     await updateProfile(formData);
@@ -213,6 +218,45 @@ export const ProfileScreen: React.FC = () => {
         <Title>Ajustes do Sistema</Title>
         <Subtitle>Configurações do aplicativo, sincronização na nuvem Supabase e segurança</Subtitle>
       </TitleSection>
+
+      {/* Card de Instalação no Celular & Tela Cheia */}
+      <Card>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+          <h3 style={{ fontSize: '1.05rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8, margin: 0 }}>
+            <Smartphone size={20} color="#ff5500" /> Aplicativo Móvel & Tela Cheia
+          </h3>
+          <Badge variant={isStandalone ? 'success' : 'accent'}>
+            {isStandalone ? 'App Instalado' : 'Modo Web'}
+          </Badge>
+        </div>
+
+        <p style={{ margin: '0 0 14px 0', fontSize: '0.85rem', color: '#a0a5b5', lineHeight: 1.45 }}>
+          Instale o Fenix Gym diretamente no seu celular para remover as barras do navegador, utilizar a <strong>tela cheia total</strong> e acessar seus treinos instantaneamente na academia, inclusive offline.
+        </p>
+
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+          {!isStandalone && (
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={() => setIsInstallModalOpen(true)}
+              type="button"
+            >
+              <Download size={15} /> Instalar no Celular
+            </Button>
+          )}
+
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={toggleFullscreen}
+            type="button"
+          >
+            {isFullscreen ? <Minimize size={15} /> : <Maximize size={15} />}
+            {isFullscreen ? 'Sair da Tela Cheia' : 'Modo Tela Cheia'}
+          </Button>
+        </div>
+      </Card>
 
       {/* Card de Conta & Sincronização na Nuvem */}
       <Card>
@@ -554,6 +598,15 @@ export const ProfileScreen: React.FC = () => {
           Restaurar Configurações Originais
         </Button>
       </ActionsContainer>
+
+      <PWAInstallModal
+        isOpen={isInstallModalOpen}
+        onClose={() => setIsInstallModalOpen(false)}
+        onInstall={promptInstall}
+        isIOS={isIOS}
+        isInstallable={isInstallable}
+        onToggleFullscreen={toggleFullscreen}
+      />
     </Container>
   );
 };

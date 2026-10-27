@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Flame, Sun, Moon, Cloud, CloudCheck, RefreshCw, LogOut } from 'lucide-react';
+import { Flame, Sun, Moon, Cloud, CloudCheck, RefreshCw, LogOut, Maximize, Minimize, Smartphone } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { usePWA } from '../../hooks/usePWA';
+import { PWAInstallModal } from './PWAInstallModal';
 
 const HeaderContainer = styled.header`
   display: flex;
@@ -116,57 +118,91 @@ const IconButton = styled.button`
 
 export const Header: React.FC = () => {
   const { settings, toggleTheme, user, openAuthModal, syncWithCloud, isSyncing, logout } = useApp();
+  const { isInstallable, isStandalone, isFullscreen, isIOS, promptInstall, toggleFullscreen } = usePWA();
+  const [isInstallModalOpen, setIsInstallModalOpen] = useState(false);
 
   return (
-    <HeaderContainer>
-      <Brand>
-        <LogoIconWrapper data-testid="brand-logo">
-          <Flame size={22} />
-        </LogoIconWrapper>
-        <BrandText>
-          <Title>
-            FENIX <span>GYM</span>
-          </Title>
-          <Subtitle>Tracker</Subtitle>
-        </BrandText>
-      </Brand>
+    <>
+      <HeaderContainer>
+        <Brand>
+          <LogoIconWrapper data-testid="brand-logo">
+            <Flame size={22} />
+          </LogoIconWrapper>
+          <BrandText>
+            <Title>
+              FENIX <span>GYM</span>
+            </Title>
+            <Subtitle>Tracker</Subtitle>
+          </BrandText>
+        </Brand>
 
-      <Actions>
-        {user ? (
-          <>
-            <CloudButton
-              $connected
-              onClick={() => syncWithCloud()}
-              disabled={isSyncing}
-              title="Clique para sincronizar com o Supabase"
-              aria-label="Sincronizar com o Supabase"
-            >
-              {isSyncing ? <RefreshCw size={14} className="spin" /> : <CloudCheck size={14} />}
-              <span>{isSyncing ? 'Sincronizando...' : 'Nuvem'}</span>
+        <Actions>
+          {user ? (
+            <>
+              <CloudButton
+                $connected
+                onClick={() => syncWithCloud()}
+                disabled={isSyncing}
+                title="Clique para sincronizar com o Supabase"
+                aria-label="Sincronizar com o Supabase"
+              >
+                {isSyncing ? <RefreshCw size={14} className="spin" /> : <CloudCheck size={14} />}
+                <span>{isSyncing ? 'Sincronizando...' : 'Nuvem'}</span>
+              </CloudButton>
+              <IconButton
+                onClick={logout}
+                title={`Conectado como ${user.email}. Clique para desconectar.`}
+                aria-label="Desconectar do Supabase"
+              >
+                <LogOut size={16} />
+              </IconButton>
+            </>
+          ) : (
+            <CloudButton onClick={openAuthModal} aria-label="Entrar ou criar conta na nuvem">
+              <Cloud size={14} />
+              <span>Nuvem</span>
             </CloudButton>
-            <IconButton
-              onClick={logout}
-              title={`Conectado como ${user.email}. Clique para desconectar.`}
-              aria-label="Desconectar do Supabase"
-            >
-              <LogOut size={16} />
-            </IconButton>
-          </>
-        ) : (
-          <CloudButton onClick={openAuthModal} aria-label="Entrar ou criar conta na nuvem">
-            <Cloud size={14} />
-            <span>Nuvem</span>
-          </CloudButton>
-        )}
+          )}
 
-        <IconButton
-          onClick={toggleTheme}
-          aria-label={settings?.theme === 'dark' ? 'Mudar para tema claro' : 'Mudar para tema escuro'}
-          title={settings?.theme === 'dark' ? 'Mudar para tema claro' : 'Mudar para tema escuro'}
-        >
-          {settings?.theme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
-        </IconButton>
-      </Actions>
-    </HeaderContainer>
+          {/* Botão de Instalar no Celular (se não estiver em modo app instalado) */}
+          {!isStandalone && (
+            <IconButton
+              onClick={() => setIsInstallModalOpen(true)}
+              aria-label="Instalar no Celular em Tela Cheia"
+              title="Instalar no Celular em Tela Cheia"
+            >
+              <Smartphone size={17} />
+            </IconButton>
+          )}
+
+          {/* Botão de Alternar Modo Tela Cheia Imediato */}
+          <IconButton
+            onClick={toggleFullscreen}
+            aria-label={isFullscreen ? 'Sair da tela cheia' : 'Entrar em modo tela cheia'}
+            title={isFullscreen ? 'Sair da tela cheia' : 'Modo tela cheia'}
+          >
+            {isFullscreen ? <Minimize size={17} /> : <Maximize size={17} />}
+          </IconButton>
+
+          {/* Botão de Alternar Tema */}
+          <IconButton
+            onClick={toggleTheme}
+            aria-label={settings?.theme === 'dark' ? 'Mudar para tema claro' : 'Mudar para tema escuro'}
+            title={settings?.theme === 'dark' ? 'Mudar para tema claro' : 'Mudar para tema escuro'}
+          >
+            {settings?.theme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
+          </IconButton>
+        </Actions>
+      </HeaderContainer>
+
+      <PWAInstallModal
+        isOpen={isInstallModalOpen}
+        onClose={() => setIsInstallModalOpen(false)}
+        onInstall={promptInstall}
+        isIOS={isIOS}
+        isInstallable={isInstallable}
+        onToggleFullscreen={toggleFullscreen}
+      />
+    </>
   );
 };
