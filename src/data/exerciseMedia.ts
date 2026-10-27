@@ -113,6 +113,55 @@ export const EXERCISE_MEDIA_MAP: Record<string, ExerciseMediaData> = {
     imagePhaseA: `${RAW_BASE_URL}Seated_Calf_Raise/0.jpg`,
     imagePhaseB: `${RAW_BASE_URL}Seated_Calf_Raise/1.jpg`,
   },
+
+  // 15. Supino com Halteres (Alternativa Livre)
+  supino_halteres: {
+    exerciseSlug: 'Dumbbell_Bench_Press',
+    imagePhaseA: `${RAW_BASE_URL}Dumbbell_Bench_Press/0.jpg`,
+    imagePhaseB: `${RAW_BASE_URL}Dumbbell_Bench_Press/1.jpg`,
+  },
+
+  // 16. Supino Reto com Barra (Alternativa Livre)
+  supino_barra: {
+    exerciseSlug: 'Barbell_Bench_Press_-_Medium_Grip',
+    imagePhaseA: `${RAW_BASE_URL}Barbell_Bench_Press_-_Medium_Grip/0.jpg`,
+    imagePhaseB: `${RAW_BASE_URL}Barbell_Bench_Press_-_Medium_Grip/1.jpg`,
+  },
+
+  // 17. Abdominal na Polia Alta (Cable Crunch)
+  abdominal_cabo: {
+    exerciseSlug: 'Cable_Crunch',
+    imagePhaseA: `${RAW_BASE_URL}Cable_Crunch/0.jpg`,
+    imagePhaseB: `${RAW_BASE_URL}Cable_Crunch/1.jpg`,
+  },
+
+  // 18. Abdominal Crunch Solo
+  abdominal_solo: {
+    exerciseSlug: 'Crunches',
+    imagePhaseA: `${RAW_BASE_URL}Crunches/0.jpg`,
+    imagePhaseB: `${RAW_BASE_URL}Crunches/1.jpg`,
+  },
+
+  // 19. Remada Baixa no Cabo (Triângulo)
+  remada_baixa_cabo: {
+    exerciseSlug: 'Seated_Cable_Rows',
+    imagePhaseA: `${RAW_BASE_URL}Seated_Cable_Rows/0.jpg`,
+    imagePhaseB: `${RAW_BASE_URL}Seated_Cable_Rows/1.jpg`,
+  },
+
+  // 20. Remada Unilateral com Halter (Serrote)
+  remada_unilateral_halter: {
+    exerciseSlug: 'One-Arm_Dumbbell_Row',
+    imagePhaseA: `${RAW_BASE_URL}One-Arm_Dumbbell_Row/0.jpg`,
+    imagePhaseB: `${RAW_BASE_URL}One-Arm_Dumbbell_Row/1.jpg`,
+  },
+
+  // 21. Panturrilha no Leg Press
+  panturrilha_leg_press: {
+    exerciseSlug: 'Calf_Press_On_The_Leg_Press_Machine',
+    imagePhaseA: `${RAW_BASE_URL}Calf_Press_On_The_Leg_Press_Machine/0.jpg`,
+    imagePhaseB: `${RAW_BASE_URL}Calf_Press_On_The_Leg_Press_Machine/1.jpg`,
+  },
 };
 
 export const getExerciseMedia = (exerciseId: string): ExerciseMediaData => {

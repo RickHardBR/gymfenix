@@ -11,6 +11,7 @@ import {
   X,
   Award,
   Activity,
+  RefreshCw,
 } from 'lucide-react';
 import type { WorkoutSession, ExerciseSetLog, SetType, PainReport } from '../../types/session';
 import type { Exercise } from '../../types/workout';
@@ -21,7 +22,8 @@ import {
   calculateSessionVolume,
   calculateWorkingSetsCount,
 } from '../../services/sessionService';
-import { getExerciseById } from '../../services/exerciseService';
+import { getExerciseById, getAllExercises } from '../../services/exerciseService';
+import { INITIAL_EXERCISES } from '../../data/initialExercises';
 import { useApp } from '../../context/AppContext';
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
@@ -288,6 +290,65 @@ export const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({
   // Estado do Guia Visual do Exercício
   const [activeGuideExercise, setActiveGuideExercise] = useState<Exercise | null>(null);
 
+  // Estado do Modal de Troca de Aparelho (Só Hoje)
+  const [swapExerciseIndex, setSwapExerciseIndex] = useState<number | null>(null);
+  const [availableAlternatives, setAvailableAlternatives] = useState<Exercise[]>([]);
+
+  const handleOpenSwapModal = async (exIndex: number) => {
+    const currentEx = session.exercises[exIndex];
+    if (!currentEx) return;
+
+    // Busca preliminar imediata usando INITIAL_EXERCISES
+    const immediateEx = INITIAL_EXERCISES.find((e) => e.id === currentEx.exerciseId);
+    let initialAlts: Exercise[] = [];
+    if (immediateEx && immediateEx.alternatives && immediateEx.alternatives.length > 0) {
+      initialAlts = INITIAL_EXERCISES.filter((e) => immediateEx.alternatives.includes(e.id));
+    }
+    setAvailableAlternatives(initialAlts);
+    setSwapExerciseIndex(exIndex);
+
+    // Carrega em background os exercícios do IndexedDB
+    try {
+      const stored = await getAllExercises();
+      if (stored && stored.length > 0) {
+        const full = stored.find((e) => e.id === currentEx.exerciseId);
+        if (full && full.alternatives && full.alternatives.length > 0) {
+          const alts = stored.filter((e) => full.alternatives.includes(e.id));
+          if (alts.length > 0) setAvailableAlternatives(alts);
+        }
+      }
+    } catch {
+      // Mantém initialAlts
+    }
+  };
+
+  const handleSwapExercise = async (targetExercise: Exercise) => {
+    if (swapExerciseIndex === null) return;
+
+    const updatedExercises = [...session.exercises];
+    const prevEx = updatedExercises[swapExerciseIndex];
+
+    updatedExercises[swapExerciseIndex] = {
+      ...prevEx,
+      exerciseId: targetExercise.id,
+      exerciseName: targetExercise.name,
+    };
+
+    const newSession = { ...session, exercises: updatedExercises };
+    setSession(newSession);
+    await saveActiveSession(newSession);
+
+    // Carrega o histórico do novo exercício substituído
+    const perf = await getLastExercisePerformance(targetExercise.id);
+    if (perf && perf.length > 0) {
+      const summary = perf.map((s) => `${s.weightKg}kg×${s.reps}`).join(', ');
+      setLastPerformanceMap((prev) => ({ ...prev, [targetExercise.id]: summary }));
+    }
+
+    showFeedback(`Aparelho trocado para ${targetExercise.name} (só hoje).`);
+    setSwapExerciseIndex(null);
+  };
+
   const handleOpenGuide = async (exerciseId: string, fallbackName: string) => {
     const fullEx = await getExerciseById(exerciseId);
     if (fullEx) {
@@ -507,7 +568,18 @@ export const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({
                 </div>
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleOpenSwapModal(exIdx)}
+                  title="Trocar aparelho ou variação para hoje"
+                  aria-label={`Trocar aparelho de ${ex.exerciseName}`}
+                  style={{ padding: '4px 8px', fontSize: '0.75rem', gap: 4 }}
+                >
+                  <RefreshCw size={13} color="#38bdf8" /> Trocar
+                </Button>
+
                 <Button
                   variant="outline"
                   size="sm"
@@ -516,12 +588,12 @@ export const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({
                   aria-label={`Ver Guia de ${ex.exerciseName}`}
                   style={{ padding: '4px 8px', fontSize: '0.75rem', gap: 4 }}
                 >
-                  <Activity size={14} color="#ff5500" /> Guia
+                  <Activity size={13} color="#f97316" /> Guia
                 </Button>
 
                 {lastPerf && (
                   <HistoryBanner title="Desempenho anterior">
-                    <History size={14} />
+                    <History size={13} />
                     <span>Última: {lastPerf}</span>
                   </HistoryBanner>
                 )}
@@ -792,6 +864,72 @@ export const ActiveWorkoutScreen: React.FC<ActiveWorkoutScreenProps> = ({
           isOpen={!!activeGuideExercise}
           onClose={() => setActiveGuideExercise(null)}
         />
+      )}
+
+      {/* Modal de Troca de Aparelho / Variação Equivalente (Só Hoje) */}
+      {swapExerciseIndex !== null && (
+        <ModalOverlay role="dialog" aria-modal="true" aria-label="Trocar Aparelho">
+          <ModalContent>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <RefreshCw size={20} color="#38bdf8" />
+                <h3 style={{ fontSize: '1.15rem', fontWeight: 800 }}>Trocar Aparelho / Variação</h3>
+              </div>
+              <button
+                onClick={() => setSwapExerciseIndex(null)}
+                style={{ background: 'none', border: 'none', color: '#9ca3af', cursor: 'pointer' }}
+                aria-label="Fechar"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <p style={{ fontSize: '0.85rem', color: '#9ca3af' }}>
+              Máquina ocupada ou indisponível? Escolha uma variação abaixo para realizar <strong>apenas na sessão de hoje</strong> sem perder a ficha original:
+            </p>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, maxHeight: 320, overflowY: 'auto' }}>
+              {availableAlternatives.length > 0 ? (
+                availableAlternatives.map((alt) => (
+                  <div
+                    key={alt.id}
+                    onClick={() => handleSwapExercise(alt)}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '12px 14px',
+                      background: '#161b22',
+                      border: '1px solid #30363d',
+                      borderRadius: 10,
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                    }}
+                  >
+                    <div>
+                      <h4 style={{ fontSize: '0.95rem', fontWeight: 700, margin: 0 }}>{alt.name}</h4>
+                      <div style={{ display: 'flex', gap: 6, marginTop: 4 }}>
+                        <Badge variant="accent">{alt.equipment}</Badge>
+                        <Badge variant="neutral">{alt.primaryMuscle}</Badge>
+                      </div>
+                    </div>
+                    <Button variant="primary" size="sm" onClick={() => handleSwapExercise(alt)}>
+                      Usar Hoje
+                    </Button>
+                  </div>
+                ))
+              ) : (
+                <p style={{ fontSize: '0.85rem', color: '#6b7280', textAlign: 'center', padding: '16px 0' }}>
+                  Nenhuma variação automática encontrada.
+                </p>
+              )}
+            </div>
+
+            <Button variant="secondary" size="md" fullWidth onClick={() => setSwapExerciseIndex(null)}>
+              Cancelar e Manter Atual
+            </Button>
+          </ModalContent>
+        </ModalOverlay>
       )}
     </Container>
   );

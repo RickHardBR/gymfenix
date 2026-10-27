@@ -80,4 +80,36 @@ describe('ActiveWorkoutScreen Component', () => {
       expect(screen.queryByText(/segurança e adaptação/i)).not.toBeInTheDocument();
     });
   });
+
+  it('permite trocar o aparelho de um exercício com 1 toque apenas hoje', async () => {
+    const session = startSession(INITIAL_WORKOUTS[0], INITIAL_EXERCISES);
+
+    render(
+      <ThemeProvider theme={darkTheme}>
+        <ActiveWorkoutScreen
+          session={session}
+          onFinishWorkout={vi.fn()}
+          onCancelWorkout={vi.fn()}
+        />
+      </ThemeProvider>
+    );
+
+    // Clica no botão Trocar do primeiro exercício (Leg Press 45°)
+    const swapButtons = screen.getAllByRole('button', { name: /trocar/i });
+    fireEvent.click(swapButtons[0]);
+
+    // O modal abre com alternativas equivalentes
+    await waitFor(() => {
+      expect(screen.getByText(/trocar aparelho \/ variação/i)).toBeInTheDocument();
+    });
+
+    // Clica em 'Usar Hoje' na primeira alternativa
+    const useTodayButtons = screen.getAllByRole('button', { name: /usar hoje/i });
+    fireEvent.click(useTodayButtons[0]);
+
+    // O modal fecha
+    await waitFor(() => {
+      expect(screen.queryByText(/trocar aparelho \/ variação/i)).not.toBeInTheDocument();
+    });
+  });
 });
