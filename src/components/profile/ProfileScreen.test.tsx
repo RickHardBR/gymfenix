@@ -25,7 +25,7 @@ describe('ProfileScreen Component', () => {
       </ThemeProvider>
     );
 
-    expect(screen.getByText(/perfil e configurações/i)).toBeInTheDocument();
+    expect(screen.getByText(/ajustes do sistema/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/nome do atleta/i)).toHaveValue('Atleta Fênix');
     expect(screen.getByLabelText(/objetivo principal/i)).toHaveValue(
       'Desenvolver força e massa muscular e melhorar a composição corporal'

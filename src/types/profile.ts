@@ -4,6 +4,15 @@ export type TrainingMethod = 'fullbody_abc' | 'upper_lower' | 'ppl' | 'outro';
 
 export interface UserProfile {
   name: string;
+  nickname?: string;
+  gender?: 'masculino' | 'feminino';
+  age?: number;
+  weightKg?: number;
+  heightCm?: number;
+  waistCm?: number; // Circunferência da cintura
+  neckCm?: number; // Circunferência do pescoço
+  hipCm?: number; // Circunferência do quadril (especialmente feminino)
+  bodyFatPercentage?: number; // % de gordura corporal
   mainGoal: string;
   trainingLocation: string;
   experienceLevel: ExperienceLevel;
@@ -36,6 +45,15 @@ export interface UserSettings {
 
 export const INITIAL_USER_PROFILE: UserProfile = {
   name: 'Atleta Fênix',
+  nickname: 'Fênix',
+  gender: 'masculino',
+  age: 30,
+  weightKg: 82.5,
+  heightCm: 178,
+  waistCm: 86,
+  neckCm: 39,
+  hipCm: 98,
+  bodyFatPercentage: 16.5,
   mainGoal: 'Desenvolver força e massa muscular e melhorar a composição corporal',
   trainingLocation: 'Academia equipada com máquinas, cabos, halteres e barras',
   experienceLevel: 'intermediario',

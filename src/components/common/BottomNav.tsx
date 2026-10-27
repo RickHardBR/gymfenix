@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Home, Dumbbell, BookOpen, TrendingUp, Settings } from 'lucide-react';
+import { Home, Dumbbell, BookOpen, TrendingUp, User, Settings } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import type { AppTab } from '../../context/AppContext';
 
@@ -65,7 +65,8 @@ export const BottomNav: React.FC = () => {
     { id: 'treinos', label: 'Treinos', icon: <Dumbbell size={20} /> },
     { id: 'exercicios', label: 'Exercícios', icon: <BookOpen size={20} /> },
     { id: 'evolucao', label: 'Evolução', icon: <TrendingUp size={20} /> },
-    { id: 'configuracoes', label: 'Configurações', icon: <Settings size={20} /> },
+    { id: 'perfil', label: 'Perfil', icon: <User size={20} /> },
+    { id: 'configuracoes', label: 'Ajustes', icon: <Settings size={20} /> },
   ];
 
   return (

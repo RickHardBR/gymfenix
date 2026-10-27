@@ -6,6 +6,7 @@ import { GlobalStyles } from './styles/GlobalStyles';
 import { Header } from './components/common/Header';
 import { BottomNav } from './components/common/BottomNav';
 import { HomeScreen } from './components/home/HomeScreen';
+import { AthleteProfileScreen } from './components/profile/AthleteProfileScreen';
 import { ProfileScreen } from './components/profile/ProfileScreen';
 import { WorkoutListScreen } from './components/workouts/WorkoutListScreen';
 import { ExerciseListScreen } from './components/exercises/ExerciseListScreen';
@@ -182,10 +183,12 @@ const AppContent: React.FC = () => {
         return <WorkoutListScreen />;
       case 'exercicios':
         return <ExerciseListScreen />;
-      case 'configuracoes':
-        return <ProfileScreen />;
       case 'evolucao':
         return <ProgressScreen />;
+      case 'perfil':
+        return <AthleteProfileScreen />;
+      case 'configuracoes':
+        return <ProfileScreen />;
       default:
         return <PlaceholderScreen tab={currentTab} />;
     }

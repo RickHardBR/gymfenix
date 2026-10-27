@@ -15,7 +15,7 @@
   <img src="https://img.shields.io/badge/Styled--Components-6-pink.svg" alt="Styled Components" />
   <img src="https://img.shields.io/badge/Supabase-Auth_%26_PostgreSQL-green.svg" alt="Supabase" />
   <img src="https://img.shields.io/badge/IndexedDB-Offline--First-purple.svg" alt="IndexedDB" />
-  <img src="https://img.shields.io/badge/Tests-65%20Passed-brightgreen.svg" alt="Vitest 65 Tests Passed" />
+  <img src="https://img.shields.io/badge/Tests-68%20Passed-brightgreen.svg" alt="Vitest 68 Tests Passed" />
 </p>
 
 ---
@@ -172,14 +172,25 @@ Aberto em formato de gaveta moderna (*bottom sheet*) diretamente na tela de trei
 
 ---
 
-### 4.8 Perfil do Atleta & Configurações
-- **Edição de Perfil:** Nome, peso corporal, altura, nível de treino e frequência semanal.
-- **Objetivos e Cuidados:** Metas principais e anotações sobre cuidados com a coluna lombar.
+### 4.8 Perfil do Atleta & Composição Corporal Real (U.S. Navy)
+- **Identificação:** Nome completo e Apelido de treino (ex: "Monstro", "Fênix").
+- **Métricas Científicas Além do IMC:**
+  - O IMC clássico considera apenas peso e altura e classifica praticantes de musculação erroneamente como "sobrepeso".
+  - **Fórmula da Marinha dos EUA (U.S. Navy Body Fat):** Calcula o percentual real de gordura corporal baseado nas circunferências de **Cintura**, **Pescoço**, **Altura** (e **Quadril** para mulheres).
+  - **Massa Magra Estimada:** Quantidade em kg de músculos, ossos e órgãos vitais.
+  - **Massa Gorda:** Quantidade em kg de gordura corporal.
+  - **Relação Cintura / Estatura (WHtR):** Indicador de excelência metabólica (ideal $\le 0.50$).
+- **Dados Biométricos & Lombar:** Registro de idade, peso, sexo biológico e condição lombar.
+
+---
+
+### 4.9 Ajustes do Sistema & Conexões
 - **Gerenciamento de Nuvem & Sincronização:**
   - Status da conexão com o Supabase.
   - Botão de **Sincronizar Agora** para envio forçado de dados pendentes.
-  - Botão de **Desconectar (Logout)**.
+  - Botão de **Desconectar (Logout)** e login rápido.
 - **Alternância de Tema:** Tema Escuro (*Dark Mode* de alto contraste) ou Tema Claro (*Light Mode*).
+- **Restauração de Dados:** Opção para restaurar configurações iniciais recomendadas.
 
 ---
 
@@ -192,6 +203,7 @@ Aberto em formato de gaveta moderna (*bottom sheet*) diretamente na tela de trei
 | **Iniciar Treino** | Home / Treinos | Inicia a sessão ativa com cronômetro e salva no IndexedDB. |
 | **Finalizar (Check Verde)** | Barra Fixa do Treino | Conclui o treino, calcula o volume em kg e abre resumo. |
 | **Cancelar** | Barra Fixa do Treino | Cancela o treino ativo com confirmação de segurança. |
+| **Trocar Aparelho (Repetir)** | Card do Exercício Ativo | Permite substituir o aparelho ocupado por outro (apenas hoje ou permanente). |
 | **Guia (Atividade)** | Cabeçalho do Exercício | Abre a gaveta de técnica com fotos A/B, cadência e dicas. |
 | **Relatar Dor (Escudo)** | Card do Exercício | Abre o modal de escala de dor de 1 a 10 com opção de parar. |
 | **Concluir Série (Check)** | Linha da Tabela de Série | Registra a série e inicia a contagem do cronômetro de descanso. |

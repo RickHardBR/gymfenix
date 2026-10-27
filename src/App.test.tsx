@@ -103,11 +103,18 @@ describe('App Integration', () => {
     expect(await screen.findByText(/biblioteca de exercícios/i)).toBeInTheDocument();
     expect(await screen.findByText('Leg Press 45°')).toBeInTheDocument();
 
-    // Navega para Configurações
-    const configTab = screen.getByRole('tab', { name: /configurações/i });
+    // Navega para Perfil
+    const perfilTab = screen.getByRole('tab', { name: /perfil/i });
+    fireEvent.click(perfilTab);
+
+    expect(await screen.findByText(/perfil do atleta/i)).toBeInTheDocument();
+    expect(await screen.findByText(/composição corporal real/i)).toBeInTheDocument();
+
+    // Navega para Ajustes
+    const configTab = screen.getByRole('tab', { name: /ajustes/i });
     fireEvent.click(configTab);
 
-    expect(await screen.findByText(/perfil e configurações/i)).toBeInTheDocument();
+    expect(await screen.findByText(/ajustes do sistema/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/nome do atleta/i)).toBeInTheDocument();
 
     // Navega para Evolução

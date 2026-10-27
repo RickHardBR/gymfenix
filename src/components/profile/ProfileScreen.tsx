@@ -210,8 +210,8 @@ export const ProfileScreen: React.FC = () => {
   return (
     <Container>
       <TitleSection>
-        <Title>Perfil e Configurações</Title>
-        <Subtitle>Gerencie seus dados de treinamento, histórico de segurança e preferências</Subtitle>
+        <Title>Ajustes do Sistema</Title>
+        <Subtitle>Configurações do aplicativo, sincronização na nuvem Supabase e segurança</Subtitle>
       </TitleSection>
 
       {/* Card de Conta & Sincronização na Nuvem */}

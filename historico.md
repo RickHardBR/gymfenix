@@ -1,8 +1,8 @@
 # FÊNIX GYM TRACKER - HISTÓRICO DE DESENVOLVIMENTO
 
 > **Última atualização:** 26/10/2026  
-> **Status Geral:** Fases 1 a 4 100% Concluídas | Login Cinematográfico | Guia Visual & Anatômico com Cadência Ativo | Supabase Operacional  
-> **Suíte de Testes:** 29 arquivos de teste, 65 testes unitários e de integração — **100% aprovados**  
+> **Status Geral:** Fases 1 a 4 100% Concluídas | Nova Aba Perfil do Atleta (U.S. Navy Body Fat, Massa Magra, Cintura/Estatura) | Troca de Aparelhos | Guia Visual & Anatômico | Supabase Operacional  
+> **Suíte de Testes:** 30 arquivos de teste, 68 testes unitários e de integração — **100% aprovados**  
 > **Build de Produção:** `tsc -b && vite build` — **Sucesso (Código 0)**  
 
 ---
@@ -90,8 +90,16 @@ O **Fênix Gym Tracker** é um aplicativo mobile-first projetado para gerenciar 
     - 🔴 *Atenção Lombar & O que Evitar:* Advertências específicas para evitar compensações ou arqueamento da coluna.
     - ⚙️ *Setup do Equipamento:* Regulagem correta da máquina, apoios e pinos de segurança.
 - **Integração:** Disponibilizado diretamente no cabeçalho de cada exercício durante o treino ativo ([`ActiveWorkoutScreen.tsx`](file:///j:/RickHardBR/FenixGyn/src/components/active-workout/ActiveWorkoutScreen.tsx)) e no modal de detalhes da biblioteca ([`ExerciseDetailModal.tsx`](file:///j:/RickHardBR/FenixGyn/src/components/exercises/ExerciseDetailModal.tsx)).
-
----
+### ✅ NOVA ABA PERFIL DO ATLETA & AVALIAÇÃO DE GORDURA REAL (U.S. NAVY)
+- **Separação Arquitetural:** Separação clara entre a aba **Perfil** (dados biométricos, medidas e composição do atleta) e a aba **Ajustes** (configurações do app, sincronização na nuvem Supabase e preferências).
+- **Métricas Científicas Além do IMC:**
+  - **Fórmula da Marinha dos EUA (U.S. Navy Body Fat):** Cálculo preciso do percentual de gordura corporal baseado na circunferência de cintura, pescoço e altura (e quadril para mulheres), superando a limitação do IMC que penaliza atletas musculosos.
+  - **Massa Magra & Massa Gorda:** Estimativa em quilogramas do peso de massa muscular/óssea versus gordura absoluta.
+  - **Relação Cintura / Estatura (WHtR):** Indicador de excelência metabólica e saúde cardiovascular (ideal <= 0.50).
+  - **Identificação do Atleta:** Suporte a nome completo e apelido de treino (ex: "Monstro", "Fênix").
+- **Troca Rápida de Aparelhos no Treino Ativo:**
+  - Botão com 1 toque no card de cada exercício ativo para selecionar aparelhos alternativos da academia (ex: Halteres, Smith, Polia, Máquina Articulada).
+  - Suporte a substituição temporária (apenas no treino de hoje) ou permanente no modelo do treino.
 
 ## 4. Estrutura do Banco no Supabase (`supabase_schema.sql`)
 

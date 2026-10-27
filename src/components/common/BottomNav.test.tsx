@@ -26,9 +26,13 @@ describe('BottomNav Component', () => {
     expect(screen.getByRole('tab', { name: /treinos/i })).toBeInTheDocument();
     expect(screen.getByRole('tab', { name: /exercícios/i })).toBeInTheDocument();
     expect(screen.getByRole('tab', { name: /evolução/i })).toBeInTheDocument();
-    expect(screen.getByRole('tab', { name: /configurações/i })).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: /perfil/i })).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: /ajustes/i })).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('tab', { name: /configurações/i }));
+    fireEvent.click(screen.getByRole('tab', { name: /perfil/i }));
+    expect(setCurrentTabMock).toHaveBeenCalledWith('perfil');
+
+    fireEvent.click(screen.getByRole('tab', { name: /ajustes/i }));
     expect(setCurrentTabMock).toHaveBeenCalledWith('configuracoes');
   });
 });

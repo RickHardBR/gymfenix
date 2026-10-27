@@ -11,7 +11,7 @@ import { getAllExercises } from '../services/exerciseService';
 import { getCurrentUser, subscribeToAuthChanges, signOutUser } from '../services/authService';
 import { syncUserProfileToCloud, syncAllSessionsWithCloud } from '../services/syncService';
 
-export type AppTab = 'inicio' | 'treinos' | 'exercicios' | 'evolucao' | 'configuracoes';
+export type AppTab = 'inicio' | 'treinos' | 'exercicios' | 'evolucao' | 'perfil' | 'configuracoes';
 
 interface AppContextData {
   currentTab: AppTab;
